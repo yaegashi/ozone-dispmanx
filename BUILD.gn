@@ -1,0 +1,48 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+visibility = [ "//ui/ozone/*" ]
+
+import("//build/config/linux/pkg_config.gni")
+
+pkg_config("bcm_host") {
+  packages = [ "bcm_host" ]
+}
+
+source_set("dispmanx") {
+  sources = [
+    "client_native_pixmap_factory_dispmanx.cc",
+    "client_native_pixmap_factory_dispmanx.h",
+    "dispmanx_surface_factory.cc",
+    "dispmanx_surface_factory.h",
+    "dispmanx_window.cc",
+    "dispmanx_window.h",
+    "dispmanx_window_manager.cc",
+    "dispmanx_window_manager.h",
+    "ozone_platform_dispmanx.cc",
+    "ozone_platform_dispmanx.h",
+  ]
+
+  deps = [
+    "//base",
+    "//skia",
+    "//ui/base",
+    "//ui/display",
+    "//ui/events",
+    "//ui/events/devices",
+    "//ui/events/ozone:events_ozone",
+    "//ui/events/ozone:events_ozone_evdev",
+    "//ui/events/ozone:events_ozone_layout",
+    "//ui/events/platform",
+    "//ui/gfx/geometry",
+    "//ui/gl",
+    "//ui/ozone:ozone_base",
+    "//ui/ozone/common",
+    "//ui/platform_window",
+  ]
+
+  configs += [
+    ":bcm_host",
+  ]
+}
