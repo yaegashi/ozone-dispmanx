@@ -11,11 +11,11 @@
 #include "ui/display/fake_display_delegate.h"
 #include "ui/events/ozone/device/device_manager.h"
 #include "ui/events/ozone/evdev/event_factory_evdev.h"
-#include "ui/events/ozone/evdev/cursor_delegate_evdev.h"
 #include "ui/events/ozone/layout/keyboard_layout_engine_manager.h"
 #include "ui/events/ozone/layout/stub/stub_keyboard_layout_engine.h"
 #include "ui/events/platform/platform_event_source.h"
 #include "ui/ozone/common/stub_overlay_manager.h"
+#include "ui/ozone/platform/dispmanx/dispmanx_cursor.h"
 #include "ui/ozone/platform/dispmanx/dispmanx_display.h"
 #include "ui/ozone/platform/dispmanx/dispmanx_surface_factory.h"
 #include "ui/ozone/platform/dispmanx/dispmanx_window.h"
@@ -30,23 +30,6 @@
 namespace ui {
 
 namespace {
-
-class DispmanxCursorEvdev: public CursorDelegateEvdev {
- public:
-  DispmanxCursorEvdev() {}
-  ~DispmanxCursorEvdev() override {}
-  void MoveCursor(const gfx::Vector2dF& delta) override { now_ += delta; }
-  void MoveCursorTo(gfx::AcceleratedWidget widget,
-      const gfx::PointF& location) override { now_ = location; }
-  void MoveCursorTo(const gfx::PointF& location) override { now_ = location; }
-  gfx::PointF GetLocation() override { return now_; }
-  bool IsCursorVisible() override { return true; }
-  gfx::Rect GetCursorConfinedBounds() override { return bounds_; }
-  void InitializeOnEvdev() override { bounds_.SetRect(0, 0, 800, 600); }
- private:
-  gfx::PointF now_;
-  gfx::Rect bounds_;
-};
 
 // OzonePlatform for dispmanx mode
 class OzonePlatformDispmanx : public OzonePlatform {
@@ -92,7 +75,7 @@ class OzonePlatformDispmanx : public OzonePlatform {
     window_manager_.reset(new DispmanxWindowManager(display_.get()));
     window_manager_->Initialize();
     surface_factory_.reset(new DispmanxSurfaceFactory(window_manager_.get()));
-    cursor_.reset(new DispmanxCursorEvdev());
+    cursor_.reset(new DispmanxCursor(window_manager_.get()));
     KeyboardLayoutEngineManager::SetKeyboardLayoutEngine(
         base::MakeUnique<StubKeyboardLayoutEngine>());
     overlay_manager_.reset(new StubOverlayManager());
@@ -101,6 +84,9 @@ class OzonePlatformDispmanx : public OzonePlatform {
     event_factory_evdev_.reset(new EventFactoryEvdev(
         cursor_.get(), device_manager_.get(),
         KeyboardLayoutEngineManager::GetKeyboardLayoutEngine()));
+    cursor_->LoadCursor(
+        cursor_factory_ozone_->GetDefaultCursor(kCursorPointer));
+    cursor_->ShowCursor();
   }
 
   void InitializeGPU() override {
@@ -113,7 +99,7 @@ class OzonePlatformDispmanx : public OzonePlatform {
   std::unique_ptr<DispmanxDisplay> display_;
   std::unique_ptr<DispmanxWindowManager> window_manager_;
   std::unique_ptr<DispmanxSurfaceFactory> surface_factory_;
-  std::unique_ptr<DispmanxCursorEvdev> cursor_;
+  std::unique_ptr<DispmanxCursor> cursor_;
   std::unique_ptr<CursorFactoryOzone> cursor_factory_ozone_;
   std::unique_ptr<GpuPlatformSupportHost> gpu_platform_support_host_;
   std::unique_ptr<OverlayManagerOzone> overlay_manager_;

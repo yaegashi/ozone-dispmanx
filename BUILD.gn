@@ -14,6 +14,8 @@ source_set("dispmanx") {
   sources = [
     "client_native_pixmap_factory_dispmanx.cc",
     "client_native_pixmap_factory_dispmanx.h",
+    "dispmanx_cursor.cc",
+    "dispmanx_cursor.h",
     "dispmanx_display.cc",
     "dispmanx_display.h",
     "dispmanx_surface_factory.cc",

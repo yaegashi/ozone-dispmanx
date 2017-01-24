@@ -46,7 +46,6 @@ void DispmanxWindow::SetBounds(const gfx::Rect& bounds) {
 }
 
 void DispmanxWindow::SetTitle(const base::string16& title) {
-  LOG(INFO) << title;
   NOTIMPLEMENTED();
 }
 
@@ -63,11 +62,11 @@ void DispmanxWindow::Close() {
 }
 
 void DispmanxWindow::SetCapture() {
-  NOTIMPLEMENTED();
+  //NOTIMPLEMENTED();
 }
 
 void DispmanxWindow::ReleaseCapture() {
-  NOTIMPLEMENTED();
+  //NOTIMPLEMENTED();
 }
 
 void DispmanxWindow::ToggleFullscreen() {
@@ -119,7 +118,7 @@ uint32_t DispmanxWindow::DispatchEvent(const PlatformEvent& native_event) {
   DispatchEventFromNativeUiEvent(
       native_event, base::Bind(&PlatformWindowDelegate::DispatchEvent,
                                base::Unretained(delegate_)));
-  return POST_DISPATCH_PERFORM_DEFAULT;
+  return POST_DISPATCH_STOP_PROPAGATION;
 }
 
 }  // namespace ui
