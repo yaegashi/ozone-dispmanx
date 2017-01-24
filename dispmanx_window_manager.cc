@@ -6,7 +6,8 @@
 
 namespace ui {
 
-DispmanxWindowManager::DispmanxWindowManager() {
+DispmanxWindowManager::DispmanxWindowManager(DispmanxDisplay *display) :
+    display_(display) {
 }
 
 DispmanxWindowManager::~DispmanxWindowManager() {
@@ -14,6 +15,10 @@ DispmanxWindowManager::~DispmanxWindowManager() {
 }
 
 void DispmanxWindowManager::Initialize() {
+}
+
+DispmanxDisplay* DispmanxWindowManager::GetDisplay() {
+  return display_;
 }
 
 int32_t DispmanxWindowManager::AddWindow(DispmanxWindow* window) {

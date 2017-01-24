@@ -15,6 +15,7 @@
 #include "base/threading/thread_checker.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/ozone/public/surface_factory_ozone.h"
+#include "ui/ozone/platform/dispmanx/dispmanx_display.h"
 
 namespace ui {
 
@@ -22,11 +23,12 @@ class DispmanxWindow;
 
 class DispmanxWindowManager {
  public:
-  explicit DispmanxWindowManager();
+  explicit DispmanxWindowManager(DispmanxDisplay *display);
   ~DispmanxWindowManager();
 
-  // Initialize (mainly check that we have a place to write output to).
   void Initialize();
+
+  DispmanxDisplay* GetDisplay();
 
   // Register a new window. Returns the window id.
   int32_t AddWindow(DispmanxWindow* window);
@@ -38,6 +40,7 @@ class DispmanxWindowManager {
   DispmanxWindow* GetWindow(int32_t window_id);
 
  private:
+  DispmanxDisplay* display_;
   IDMap<DispmanxWindow*> windows_;
   base::ThreadChecker thread_checker_;
 

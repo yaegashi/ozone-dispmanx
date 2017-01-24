@@ -18,6 +18,9 @@ DispmanxWindow::DispmanxWindow(PlatformWindowDelegate* delegate,
                                DispmanxWindowManager* manager,
                                const gfx::Rect& bounds)
     : delegate_(delegate), manager_(manager), bounds_(bounds) {
+  // XXX: Force fullscreen size
+  bounds_.set_origin(gfx::Point(0, 0));
+  bounds_.set_size(manager->GetDisplay()->GetSize());
   widget_ = manager_->AddWindow(this);
   delegate_->OnAcceleratedWidgetAvailable(widget_, 1.f);
   PlatformEventSource::GetInstance()->AddPlatformEventDispatcher(this);
@@ -37,37 +40,66 @@ gfx::Rect DispmanxWindow::GetBounds() {
 }
 
 void DispmanxWindow::SetBounds(const gfx::Rect& bounds) {
-  bounds_ = bounds;
-  delegate_->OnBoundsChanged(bounds);
+  // XXX: Force fullscreen size
+  // bounds_ = bounds;
+  delegate_->OnBoundsChanged(bounds_);
 }
 
-void DispmanxWindow::SetTitle(const base::string16& title) {}
+void DispmanxWindow::SetTitle(const base::string16& title) {
+  LOG(INFO) << title;
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::Show() {}
+void DispmanxWindow::Show() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::Hide() {}
+void DispmanxWindow::Hide() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::Close() {}
+void DispmanxWindow::Close() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::SetCapture() {}
+void DispmanxWindow::SetCapture() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::ReleaseCapture() {}
+void DispmanxWindow::ReleaseCapture() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::ToggleFullscreen() {}
+void DispmanxWindow::ToggleFullscreen() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::Maximize() {}
+void DispmanxWindow::Maximize() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::Minimize() {}
+void DispmanxWindow::Minimize() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::Restore() {}
+void DispmanxWindow::Restore() {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::SetCursor(PlatformCursor cursor) {}
+void DispmanxWindow::SetCursor(PlatformCursor cursor) {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::MoveCursorTo(const gfx::Point& location) {}
+void DispmanxWindow::MoveCursorTo(const gfx::Point& location) {
+  NOTIMPLEMENTED();
+}
 
-void DispmanxWindow::ConfineCursorToBounds(const gfx::Rect& bounds) {}
+void DispmanxWindow::ConfineCursorToBounds(const gfx::Rect& bounds) {
+  NOTIMPLEMENTED();
+}
 
 PlatformImeController* DispmanxWindow::GetPlatformImeController() {
+  NOTIMPLEMENTED();
   return nullptr;
 }
 

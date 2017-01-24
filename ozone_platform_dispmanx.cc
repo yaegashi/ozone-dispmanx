@@ -16,6 +16,7 @@
 #include "ui/events/ozone/layout/stub/stub_keyboard_layout_engine.h"
 #include "ui/events/platform/platform_event_source.h"
 #include "ui/ozone/common/stub_overlay_manager.h"
+#include "ui/ozone/platform/dispmanx/dispmanx_display.h"
 #include "ui/ozone/platform/dispmanx/dispmanx_surface_factory.h"
 #include "ui/ozone/platform/dispmanx/dispmanx_window.h"
 #include "ui/ozone/platform/dispmanx/dispmanx_window_manager.h"
@@ -75,9 +76,9 @@ class OzonePlatformDispmanx : public OzonePlatform {
   std::unique_ptr<PlatformWindow> CreatePlatformWindow(
       PlatformWindowDelegate* delegate,
       const gfx::Rect& bounds) override {
-    std::unique_ptr<DispmanxWindow> platform_window(
+    std::unique_ptr<DispmanxWindow> window(
         new DispmanxWindow(delegate, window_manager_.get(), bounds));
-    return std::move(platform_window);
+    return std::move(window);
   }
   std::unique_ptr<display::NativeDisplayDelegate> CreateNativeDisplayDelegate()
       override {
@@ -86,18 +87,20 @@ class OzonePlatformDispmanx : public OzonePlatform {
 
   void InitializeUI() override {
     device_manager_ = CreateDeviceManager();
-    window_manager_.reset(new DispmanxWindowManager());
+    display_.reset(new DispmanxDisplay());
+    display_->Initialize();
+    window_manager_.reset(new DispmanxWindowManager(display_.get()));
     window_manager_->Initialize();
     surface_factory_.reset(new DispmanxSurfaceFactory(window_manager_.get()));
     cursor_.reset(new DispmanxCursorEvdev());
     KeyboardLayoutEngineManager::SetKeyboardLayoutEngine(
         base::MakeUnique<StubKeyboardLayoutEngine>());
-    event_factory_evdev_.reset(new EventFactoryEvdev(
-        cursor_.get(), device_manager_.get(),
-        KeyboardLayoutEngineManager::GetKeyboardLayoutEngine()));
     overlay_manager_.reset(new StubOverlayManager());
     cursor_factory_ozone_.reset(new BitmapCursorFactoryOzone);
     gpu_platform_support_host_.reset(CreateStubGpuPlatformSupportHost());
+    event_factory_evdev_.reset(new EventFactoryEvdev(
+        cursor_.get(), device_manager_.get(),
+        KeyboardLayoutEngineManager::GetKeyboardLayoutEngine()));
   }
 
   void InitializeGPU() override {
@@ -106,13 +109,14 @@ class OzonePlatformDispmanx : public OzonePlatform {
   }
 
  private:
+  std::unique_ptr<DeviceManager> device_manager_;
+  std::unique_ptr<DispmanxDisplay> display_;
   std::unique_ptr<DispmanxWindowManager> window_manager_;
   std::unique_ptr<DispmanxSurfaceFactory> surface_factory_;
   std::unique_ptr<DispmanxCursorEvdev> cursor_;
   std::unique_ptr<CursorFactoryOzone> cursor_factory_ozone_;
   std::unique_ptr<GpuPlatformSupportHost> gpu_platform_support_host_;
   std::unique_ptr<OverlayManagerOzone> overlay_manager_;
-  std::unique_ptr<DeviceManager> device_manager_;
   std::unique_ptr<EventFactoryEvdev> event_factory_evdev_;
 
   DISALLOW_COPY_AND_ASSIGN(OzonePlatformDispmanx);
