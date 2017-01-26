@@ -1,0 +1,34 @@
+From e46837fb4b67da1faacec4a0f15c46b3f7d2ea65 Mon Sep 17 00:00:00 2001
+From: YAEGASHI Takeshi <yaegashi@debian.org>
+Date: Fri, 27 Jan 2017 04:23:51 +0900
+Subject: Force to enable WebGL on Ozone platform dispmanx
+
+Apparently the driver has no suuport for GL_OES_packed_depth_stencil...
+---
+ third_party/WebKit/Source/modules/webgl/WebGLRenderingContextBase.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/third_party/WebKit/Source/modules/webgl/WebGLRenderingContextBase.cpp b/third_party/WebKit/Source/modules/webgl/WebGLRenderingContextBase.cpp
+index 7ec6b2e..922fcaa 100644
+--- a/third_party/WebKit/Source/modules/webgl/WebGLRenderingContextBase.cpp
++++ b/third_party/WebKit/Source/modules/webgl/WebGLRenderingContextBase.cpp
+@@ -649,6 +649,8 @@ WebGLRenderingContextBase::createContextProviderInternal(
+           extractWebGLContextCreationError(glInfo)));
+     return nullptr;
+   }
++#if 0
++  // XXX: Force to enable WebGL on Ozone platform dispmanx (Raspberry Pi)
+   gpu::gles2::GLES2Interface* gl = contextProvider->contextGL();
+   if (!String(gl->GetString(GL_EXTENSIONS))
+            .contains("GL_OES_packed_depth_stencil")) {
+@@ -658,6 +660,7 @@ WebGLRenderingContextBase::createContextProviderInternal(
+           "OES_packed_depth_stencil support is required."));
+     return nullptr;
+   }
++#endif
+   return contextProvider;
+ }
+ 
+-- 
+2.9.3
+

@@ -1,0 +1,28 @@
+From 877d0d399b3daef1fd85bd0274a61f174a7d328a Mon Sep 17 00:00:00 2001
+From: YAEGASHI Takeshi <yaegashi@debian.org>
+Date: Fri, 27 Jan 2017 04:24:29 +0900
+Subject: Ugly hack to pass keydown events to text editing elements
+
+---
+ third_party/WebKit/Source/core/input/KeyboardEventManager.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/third_party/WebKit/Source/core/input/KeyboardEventManager.cpp b/third_party/WebKit/Source/core/input/KeyboardEventManager.cpp
+index c27e423..4379990 100644
+--- a/third_party/WebKit/Source/core/input/KeyboardEventManager.cpp
++++ b/third_party/WebKit/Source/core/input/KeyboardEventManager.cpp
+@@ -222,8 +222,11 @@ WebInputEventResult KeyboardEventManager::keyEvent(
+   if (changedFocusedFrame)
+     return WebInputEventResult::HandledSystem;
+ 
++#if 0
++  // XXX: This prevents any text edit events from being processed???
+   if (initialKeyEvent.type() == WebInputEvent::RawKeyDown)
+     return WebInputEventResult::NotHandled;
++#endif
+ 
+   // Focus may have changed during keydown handling, so refetch node.
+   // But if we are dispatching a fake backward compatibility keypress, then we
+-- 
+2.9.3
+
