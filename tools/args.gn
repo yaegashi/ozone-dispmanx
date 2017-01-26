@@ -1,0 +1,17 @@
+# Build arguments go here. Examples:
+#   is_component_build = true
+#   is_debug = false
+# See "gn args <out_dir> --list" for available build arguments.
+
+is_debug = false
+enable_nacl = false
+remove_webcore_debug_symbols = true
+toolkit_views = false
+target_cpu = "arm"
+use_ozone = true
+ozone_auto_platforms = false
+ozone_platform_headless = true
+
+# Setting up ccache is really recommended, you'll need to set CCACHE_CPP2=yes
+# in the environment variable to build successfully.
+# cc_wrapper = "ccache"
