@@ -2,11 +2,13 @@
 
 ## Introduction
 
-This is a [Chromium Ozone](https://chromium.googlesource.com/chromium/src/+/master/docs/ozone_overview.md) port to Raspberry Pi using dispmanx.  [Dispmanx](http://elinux.org/Raspberry_Pi_VideoCore_APIs) is a native graphics library supporting OpenGL ES/EGL on VideoCore IV GPU equipped by Raspberry Pi.
+This is a [Chromium Ozone](https://chromium.googlesource.com/chromium/src/+/master/docs/ozone_overview.md) port to Raspberry Pi using dispmanx.  [Dispmanx](http://elinux.org/Raspberry_Pi_VideoCore_APIs) is a native display management API supporting OpenGL ES/EGL surfaces on VideoCore IV GPU equipped by Raspberry Pi.  It can achieve siginificant performance improvement compared to the traditional X11 platform.
+
+[![YouTube video](https://img.youtube.com/vi/61sEBhJa7k8/0.jpg)](https://www.youtube.com/watch?v=61sEBhJa7k8)
 
 Current status:
 
-- Only fullscreen `content_shell` works (no address bar, histories, bookmarks).
+- Only fullscreen `content_shell` works (no navigation, no address bar, no bookmarks)
 - No GPU process separation, run with `--in-process-gpu`.
 - Keyboard/mouse input support using evdev driver, but no VT console handling.
 - It's forced to support WebGL - renderings are severely broken / no output for most pages.
@@ -78,3 +80,7 @@ Some recommended URLs:
 - <https://www.google.com/logos/2010/pacman10-i.html> - Play PAC-MAN Doodle
 - <https://threejs.org/examples> - Lots of WebGL pages to torture dispmanx
 - <https://youtube.com> - See acceptable quality of movie playback
+
+## Related Projects
+
+- <https://github.com/fred-wang/ozone-caca>
